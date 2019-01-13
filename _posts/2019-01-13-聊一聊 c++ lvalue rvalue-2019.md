@@ -4,7 +4,7 @@ title:      聊一聊 c++ lvalue rvalue
 subtitle:   lvalue & rvalue
 date:       2019-01-13
 author:     唐瑞甫
-header-img: img/post-bg-cook.jpg
+header-img: img/post-bg-coffee.jpeg
 catalog: true
 tags:
     - c++
