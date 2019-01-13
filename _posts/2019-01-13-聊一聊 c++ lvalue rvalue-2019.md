@@ -58,7 +58,7 @@ int* &p = a;
 由于const在int前端，从语义上来讲，p是一个指向const int\*的 **non-const** 引用。如果将一个int\*类型的左值，直接赋值给一个const int\*的左值，需要做隐式转换。
   
 对于隐式转换，有以下一些限制需要注意
->1. An type-qualified rvalue of any type, containing zero or more const or volatile qualifications, can be converted to an rvalue of type-qualified type where the second rvalue contains more const or volatile qualifications than the first rvalue.  
+> An type-qualified rvalue of any type, containing zero or more const or volatile qualifications, can be converted to an rvalue of type-qualified type where the second rvalue contains more const or volatile qualifications than the first rvalue.  
 >There is partial ordering of cv-qualifiers by the order of increasing restrictions. The type can be said more or less cv-qualified then:  
 >>unqualified < const  
 unqualified < volatile  
@@ -66,7 +66,7 @@ unqualified < const volatile
 const < const volatile  
 volatile < const volatile  
 
->2. A lvalue of any non-function, non-array type T can be implicitly converted to a rvalue of the same type. If T is a non-class type, this conversion also removes cv-qualifiers.
+> A lvalue of any non-function, non-array type T can be implicitly converted to a rvalue of the same type. If T is a non-class type, this conversion also removes cv-qualifiers.
   
 所以此时b是个int\***左值**，需要先通过第2条规则将b转换为一个int\***右值**，然后再通过第1条规则，将b转换成一个const int\***右值**。
 既然b现在是右值，那么是可以用来初始化const引用的。但前文已经分析了此时p是一个**non-const** 引用。所以就会触发编辑器报错
