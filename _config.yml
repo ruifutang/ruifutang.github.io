@@ -1,9 +1,9 @@
 # Site settings
-title: 唐瑞甫的博客
+title: R&F BLOG
 SEOTitle: 唐瑞甫的博客 | RF Blog
 header-img: img/post-bg-desk.jpg
 email: mctang24@gmail.com
-description: "Every failure is leading towards success."
+description: "他说他这一生见过的美景"
 keyword: "RF Blog, 唐瑞甫的博客 "
 url: "http://ruifutang.github.io"          # your host, for absolute URL
 baseurl: ""      # for example, '/blog' if your blog hosted on 'host/blog'
