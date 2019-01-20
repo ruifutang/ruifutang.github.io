@@ -1,13 +1,13 @@
 ---
 layout:     post
-title:      聊一聊 c++ lvalue rvalue
-subtitle:   lvalue & rvalue
+title:      关于const的一个有趣的问题
+subtitle:   想隐式转换？先看合不合规矩
 date:       2019-01-13
 author:     唐瑞甫
 header-img: img/post-bg-coffee.jpeg
 catalog: true
 tags:
-    - c++
+
 ---  
 
 先来看一段简单的代码
@@ -17,7 +17,7 @@ int *a;
 const int* &p = a;
 ```
 乍一看，好像没什么问题。  
-***BUT*** 嘿嘿  
+***BUT***  
 编译器报错了 
 
 ```
@@ -72,10 +72,9 @@ volatile < const volatile
 既然b现在是右值，那么是可以用来初始化const引用的。但前文已经分析了此时p是一个**non-const** 引用。所以就会触发编辑器报错
 **不能用一个const int\*右值来初始化const int\*的non-const引用**
 
-**小结**一下这边文章，文章开头从一个小的问题出发，然后引入了lvalue, rvalue的概念，进而分析了const-qualified lvalue/rvalue之间的一些转换规则。若有理解不对的地方，欢迎及时指正。
-
-其实，文中埋下了一个伏笔，也就是C++ 11中大名鼎鼎的 **rvalue reference**及其**std::move()语义**  
-下回见。  
+**小结**一下这边文章，文章开头从一个小的问题出发，然后引入了lvalue, rvalue的概念，进而分析了const-qualified lvalue/rvalue之间的一些转换规则。  
+  
+  若有理解不对的地方，欢迎及时指正。 
 
 ---
   By 唐瑞甫
