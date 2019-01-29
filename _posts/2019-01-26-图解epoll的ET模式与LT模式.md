@@ -1,21 +1,22 @@
 ---
 layout:     post
 title:      图解epoll的ET模式与LT模式
-subtitle:   ET ? or LT ?
+subtitle:   ET or LT 
 date:       2019-01-26
 author:     唐瑞甫
 header-img: img/post-bg-coffee.jpeg
 catalog: true
 tags: 
-	 - epoll
+    - epoll
 
 
 ---  
 
 上一篇利用**epoll**实现了一个简单的reactor的demo。众所周知,epoll有两种不同的模式，分别是ET模式跟LT模式。
+
 > 需要注意的是，只有ET模式是epoll独有的，而select()跟poll()都只支持LT模式
 
-###几种场景  
+### 几种场景  
 
 #### ET  
 那先来看一下ET模式下被触发的情况，依旧读跟写的场景分开。  
@@ -48,7 +49,7 @@ tags:
   
   
   
-####LT
+#### LT
 ET的几种场景已经介绍完了，下面开始介绍LT触发的场景。相对于ET而言，LT触发的场景更“通用”一些。**所有触发ET模式的场景，都能够触发LT模式**。  
 下面两种更常见的情况，则只会触发LT模式。  
 
@@ -62,7 +63,7 @@ ET的几种场景已经介绍完了，下面开始介绍LT触发的场景。相�
 ![epoll_lt1](https://wx4.sinaimg.cn/mw690/9a30a1bagy1fzjwek2y5gj20sg0lcab1.jpg) 
 
 
-###一个实验
+### 一个实验
 可以做个简单的实验来验证下上面说的几种情况。  
 
 
@@ -169,7 +170,7 @@ int main()
   
 **ET/LT**写模式下的验证方法类似，就不演示了。  
 
-###小结
+### 小结
 本文分别对**ET/LT**模式下读跟写被触发的场景进行了分析，并且给出了代码示例可以在linux下进行验证。之前看了一小部分epoll源码，推荐大家可以去拜读下，了解了底层原理再来看上层的这些场景也可以帮助理解底层的实现。
 
 
