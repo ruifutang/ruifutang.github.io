@@ -1,10 +1,10 @@
 # Site settings
-title: R&F BLOG
+title: 北海 绿林
 SEOTitle: 唐瑞甫的博客 | RF Blog
 header-img: img/post-bg-desk.jpg
 email: mctang24@gmail.com
 description: "他说他这一生见过的美景"
-keyword: "RF Blog, 唐瑞甫的博客 "
+keyword: "唐瑞甫的博客 "
 url: "http://ruifutang.github.io"          # your host, for absolute URL
 baseurl: ""      # for example, '/blog' if your blog hosted on 'host/blog'
 github_repo: "https://github.com/ruifutang/ruifutang.github.io.git" # you code repository
@@ -83,7 +83,7 @@ ga_domain: auto              # 默认的是 auto, 这里我是自定义了的域
 
 # Featured Tags
 featured-tags: true                     # 是否使用首页标签
-featured-condition-size: 1              # 相同标签数量大于这个数，才会出现在首页
+featured-condition-size: 0              # 相同标签数量大于这个数，才会出现在首页
 
 
 
