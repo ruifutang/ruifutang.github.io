@@ -65,7 +65,7 @@ multi-paxos 跟 raft 还有一个很大的区别就是 Raft要求日志一定是
   
 如果是基于非租约实现的，当单节点出现宕机后需要恢复时，由于容灾粒度足够下则意味着单条日志几乎都是**独立**的，这样恢复起来就非常高效。以上文中提到的 paxosstore 为例，paxosstore 鼓励细粒度的容灾单元，例如对于账号都建议使用user（对应uin）作为容灾粒度。于是paxosstore 把 paxos log 做了细粒度的划分，每一个键值/队列/表（统称entity）由独立的 paxos log 做数据同步，这样单机上可能维护着「互相独立」的数千万个 paxos log，使得宕机后的catchup代价降到非常低，尤其对于读多写少的服务，宕机恢复后大部分 entity 根本无需catchup。  
   
-#### 一些资源  
+### 一些资源  
 
 关于 Raft 的动态[流程图](http://thesecretlivesofdata.com/raft/)  
 关于 paxos 我看过最好的[视频](https://www.youtube.com/watch?v=JEpsBg0AO6o)  
