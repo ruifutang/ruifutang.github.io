@@ -31,6 +31,8 @@ paxos 和 raft 都是一致性算法，而且都支持实现强一致性。那�
   
 本质上，raft 也是 paxos 算法的一个变种，基于 paxos 增加了一些限制，使其效率更高(增加leader)，更容易被工程化(单写多读)。  
   
+![演进图](https://wx2.sinaimg.cn/mw1024/9a30a1baly1g8o1g2ryzpj20o30cl0t5.jpg)
+  
 工程上很少直接使用 basic-paxos ，basic-paxos 本质上只能就**一个**常量(提案或者值) 达成一致。所以一般使用 multi-paxos 的情况会多一些，然而 Leslie Lamport 老爷子并没有在他的大作里面给出具体如何实现的详细描述跟证明，只是简单提了一下：
 
 > To guarantee that all servers execute the same sequence of state machine commands, we implement a sequence of separate instances of the Paxos consensus algorithm, the value chosen by the i-th instance being the i-th state machine command in the sequence.  
@@ -40,11 +42,13 @@ paxos 和 raft 都是一致性算法，而且都支持实现强一致性。那�
 #### lease-based?  
 目前对于 multi-paxos 最大的「误解」，就是认为 multi-paxos 是一个 lease-based 的算法，也就是说 multi-paxos 算法的角色中必须有 leader。  
   
-需要明确的是，引入 leader 这个角色，并不是为了解决一致性的问题，而是为了提升性能，因为 basic-paxos 在高并发的情况下可能需要多轮提案才能确定最终的结果，而且有可能出现活锁，导致 basic-paxos的性能不佳。目前很多 multi-paxos 的实现方案引入 leader 只是实现起来方便，而且可以大幅提高性能，因为通过加入一定的限制条件可以在一轮 proposal 的情况下进行多轮 accept ，具体细节这里不做展开，本文的关注点是在 multi-paxos 跟 raft 的区别上。  
+需要明确的是，引入 leader 这个角色，并不是为了解决一致性的问题，而是为了提升性能，因为 basic-paxos 在高并发的情况下可能需要多轮提案才能确定最终的结果，而且有可能出现活锁，导致 basic-paxos的性能不佳。目前很多 multi-paxos 的实现方案引入 leader 只是实现起来方便，而且可以大幅提高性能，因为通过加入一定的限制条件可以在一轮 proposal 的情况下进行多轮 accept ，具体细节这里不做展开，本文的关注点是在 multi-paxos 跟 raft 的区别上。   
+  
+![](https://wx4.sinaimg.cn/mw1024/9a30a1bagy1g8u6ryc2nlj21a60u0acq.jpg) 
   
 那么什么情况下不适用这种 lease-based 的算法呢？  
   
-Availability。对系统要求高可用的情况下，不能使用这种基于租约的算法。因为一旦单机出现宕机的情况就需要切主，这时还需要进行选主，这一定会带来不可用的时间。目前 raft-based 系统在单节点异常情况下需要忍受几百毫秒的不可用时间。  
+对系统要求高可用的情况下，不能使用这种基于租约的算法。因为一旦单机出现宕机的情况就需要切主，这时还需要进行选主，这一定会带来不可用的时间。目前 raft-based 系统在单节点异常情况下需要忍受几百毫秒的不可用时间。  
   
 而且对于这种 lease-based 的算法，就会出现单节点的瓶颈，一旦 leader 节点出现过载的情况，要么整个系统会被拖垮，要么一部分请求会被拒绝服务。都会影响用户体验。  
   
@@ -54,6 +58,8 @@ Availability。对系统要求高可用的情况下，不能使用这种基于�
   
 #### hole  
 multi-paxos 跟 raft 还有一个很大的区别就是 Raft要求日志一定是连续，而 multi-paxos则允许日志有空洞。  
+  
+![](https://wx3.sinaimg.cn/mw1024/9a30a1bagy1g8u6rwbejyj21d00u0gna.jpg)
   
 对于 raft 来说，日志的连续性也意味着两个不同节点上相同序号的日志，只要 term 相同，那么这两条日志必然相同，并且之前的日志也必然相同，这样当 leader 节点需要跟 follower 节点同步日志时，非常简洁跟高效。  
   
