@@ -23,13 +23,13 @@ tags:
 先看ET读的情况。  
   
 
-1. **当buffer由不可读(空)的状态变成可读(有待读数据)状态的时候**。
-![epoll_et1](https://wx1.sinaimg.cn/mw690/9a30a1bagy1fzjupvjfkpj20sg0lc0tm.jpg)   
+1. **当buffer由不可读(空)的状态变成可读(有待读数据)状态的时候**。  
+![epoll_et1](/img/image/lt1.jpg)   
   
   
 
-2. **当buffer中的待读取的数据增多的时候**。
-![epoll_et2](https://wx3.sinaimg.cn/mw690/9a30a1bagy1fzjuq457n3j20sg0lcq40.jpg)   
+2. **当buffer中的待读取的数据增多的时候**。  
+![epoll_et2](/img/image/lt2.jpg)   
   
   
 3. **当buffer中有数据可读,且对fd调用epoll_mod IN事件的时候**。
@@ -38,11 +38,11 @@ tags:
 那这几种情况应该怎么验证呢？别急，先接着说ET写触发的情况，跟读的情况类似。  
 
 1. **当buffer由不可写(满)的状态变程可写(有可写空间)状态的时候**。
-![epoll_et3](https://wx2.sinaimg.cn/mw690/9a30a1bagy1fzjuq4869fj20sg0lc3zd.jpg)   
+![epoll_et3](/img/image/lt3.jpg)   
   
   
 2. **当buffer中待写的数据减少的时候**。
-![epoll_et4](https://wx2.sinaimg.cn/mw690/9a30a1bagy1fzjuq4bzjuj20sg0lc0to.jpg)   
+![epoll_et4](/img/image/lt4.jpg)   
   
   
 3. **当buffer中有空间可写，且对fd调用epoll_mod OUT事件的时候**。  
@@ -54,13 +54,13 @@ ET的几种场景已经介绍完了，下面开始介绍LT触发的场景。相�
 下面两种更常见的情况，则只会触发LT模式。  
 
 对于LT读而言  
-- 当buffer中待读数据减少，而又未完全读取完的时候，**只**会触发LT模式。
-![epoll_lt1](https://wx4.sinaimg.cn/mw690/9a30a1bagy1fzjuq4dc13j20sg0lcdgv.jpg)   
+- 当buffer中待读数据减少，而又未完全读取完的时候，**只**会触发LT模式。  
+![epoll_lt1](/img/image/lt5.jpg)   
   
   
 对于LT写而言  
-- 当buffer可写空间减少，而空间未完全被占满的时候，**只**会触发LT模式。
-![epoll_lt1](https://wx4.sinaimg.cn/mw690/9a30a1bagy1fzjwek2y5gj20sg0lcab1.jpg) 
+- 当buffer可写空间减少，而空间未完全被占满的时候，**只**会触发LT模式。  
+![epoll_lt1](/img/image/lt6.jpg) 
 
 
 ### 一个实验
@@ -94,7 +94,7 @@ int main()
 ```
 
 这段代码的运行结果如下图所示。
-![epoll_exp1](https://wx2.sinaimg.cn/mw690/9a30a1bagy1fzkg4d5yiqj20az04st8i.jpg)   
+![epoll_exp1](/img/image/res1.jpg)   
   
 每当键盘有输入动作是，就会触发那条std:cout语句。这是因为用户每输入一组字符，都会导致buffer中的可读数据增多，进而导致fd状态的改变，对应于上文ET读模式下的**第二种**情况，会唤醒ET模式下的epoll_wait().  
   
@@ -127,7 +127,7 @@ int main()
 ```
   
 对应结果如下  
-![epoll_exp2](https://wx4.sinaimg.cn/mw690/9a30a1bagy1fzkg4dgis0j20fg04pdfo.jpg)   
+![epoll_exp2](/img/image/res2.jpg)   
   
 只要键盘有任何输入，则会出现上图刷屏的情况，也就是程序陷入了死循环。那么为什么改成LT模式下就会出现这个情况呢？这是因为只要输入任意数据后，数据被传入buffer，所以LT模式下每次都会由于buffer有数据可读而触发epoll_wait(),所以会陷入死循环中。  
   
@@ -164,7 +164,7 @@ int main()
   
 结果如下图所示。  
 
-![epoll_exp1](https://wx3.sinaimg.cn/mw690/9a30a1bagy1fzkg4d94cmj20ej04at8j.jpg)   
+![epoll_exp1](/img/image/res3.jpg)   
   
 有感兴趣的可以将这段代码里面的**EPOLL\_CTL\_MOD**改成**EPOLL\_CTL\_ADD** 试下， 看会出现什么结果。
   
